@@ -128,4 +128,4 @@ Return the data as valid JSON matching the QAResult schema.
         qa_result = QAResult.model_validate_json(result)
         
         logger.info(f"QAAgent: Validation complete - Status: {qa_result.overall_status}")
-        return qa_result
+        return qa_result    
