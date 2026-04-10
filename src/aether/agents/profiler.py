@@ -1,20 +1,15 @@
 from crewai import Agent, Task
-from langchain_anthropic import ChatAnthropic
-from aether.config.settings import settings
+from aether.config.llm_config import agent_llm  # CHANGED
 from aether.schemas.clinical import PatientData, ClinicalHistory, PatientProfile
 from aether.utils.logger import logger
+import re  # ADDED
 
 
 class ProfilerAgent:
     """Clinical Risk Profiler Agent - Identifies risks and cognitive indicators."""
     
     def __init__(self):
-        self.llm = ChatAnthropic(
-            model=settings.claude_model,
-            anthropic_api_key=settings.anthropic_api_key,
-            temperature=0.4,
-            max_tokens=8192,
-        )
+        self.llm = agent_llm  # CHANGED
         
         self.agent = Agent(
             role="Clinical Risk Profiler",
@@ -61,36 +56,27 @@ ALLERGIES:
 {', '.join(clinical_history.allergies) if clinical_history.allergies else 'None documented'}
 
 Analyze and identify:
+1. RISK FLAGS across categories
+2. COGNITIVE INDICATORS by domain
+3. COMPLEXITY SCORE (1-10)
+4. INFORMATION GAPS
 
-1. RISK FLAGS across categories:
-   - Clinical risks (falls, delirium, polypharmacy)
-   - Safety concerns (wandering, self-neglect, capacity)
-   - Medication interactions or concerns
-   - Social risks (isolation, carer strain)
-   - Cognitive deterioration pace
-
-2. COGNITIVE INDICATORS by domain:
-   - Memory (episodic, semantic, working)
-   - Attention and concentration
-   - Language and communication
-   - Executive function
-   - Visuospatial abilities
-
-3. COMPLEXITY SCORE (1-10) based on:
-   - Number of comorbidities
-   - Polypharmacy
-   - Psychosocial factors
-   - Diagnostic uncertainty
-
-4. INFORMATION GAPS that need clarification
-
-Provide evidence-based reasoning for each flag.
-
-Return the data as valid JSON matching the PatientProfile schema.
+Return ONLY valid JSON. No markdown.
             """.strip(),
             expected_output="Comprehensive patient risk and cognitive profile as JSON",
             agent=self.agent,
         )
+    
+    def _clean_json_response(self, result: str) -> str:  # ADDED
+        """Clean Gemini response."""
+        result = result.strip()
+        if result.startswith("```"):
+            result = re.sub(r'^```(?:json)?\n', '', result)
+            result = re.sub(r'\n```$', '', result)
+        json_match = re.search(r'\{.*\}', result, re.DOTALL)
+        if json_match:
+            result = json_match.group(0)
+        return result.strip()
     
     def execute(self, patient_data: PatientData, clinical_history: ClinicalHistory) -> PatientProfile:
         """Execute the profiler agent."""
@@ -98,6 +84,8 @@ Return the data as valid JSON matching the PatientProfile schema.
         
         task = self.create_task(patient_data, clinical_history)
         result = task.execute()
+        
+        result = self._clean_json_response(result)  # ADDED
         
         patient_profile = PatientProfile.model_validate_json(result)
         

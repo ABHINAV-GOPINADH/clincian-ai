@@ -1,31 +1,25 @@
 from crewai import Agent, Task
-from langchain_anthropic import ChatAnthropic
-from aether.config.settings import settings
+from aether.config.llm_config import agent_llm  # CHANGED
 from aether.schemas.clinical import (
     PatientData, ClinicalHistory, PatientProfile, AssessmentPlan, ClinicalBrief, QAResult
 )
 from aether.tools.rag_tool import nice_guidance_tool, nice_rag
 from aether.utils.logger import logger
+import re  # ADDED
 
 
 class QAAgent:
-    """Clinical Quality Assurance Agent - Validates clinical accuracy and safety."""
+    """Clinical Quality Assurance Agent."""
     
     def __init__(self):
-        self.llm = ChatAnthropic(
-            model=settings.claude_model,
-            anthropic_api_key=settings.anthropic_api_key,
-            temperature=0.2,
-            max_tokens=16384,
-        )
+        self.llm = agent_llm  # CHANGED
         
         self.agent = Agent(
             role="Clinical Quality Assurance Specialist",
             goal="Validate clinical accuracy, NICE compliance, and safety of assessment outputs",
             backstory=(
                 "You are a clinical governance lead with expertise in dementia care pathways. "
-                "You perform rigorous quality checks ensuring clinical accuracy, guideline compliance, "
-                "and patient safety before any clinical output is released."
+                "You perform rigorous quality checks ensuring clinical accuracy and patient safety."
             ),
             llm=self.llm,
             tools=[nice_guidance_tool],
@@ -42,7 +36,6 @@ class QAAgent:
         clinical_brief: ClinicalBrief
     ) -> Task:
         """Create QA validation task."""
-        # Retrieve NICE compliance requirements
         nice_compliance = nice_rag.retrieve_guidance(
             "NICE NG97 dementia assessment mandatory requirements quality standards",
             top_k=3
@@ -53,61 +46,30 @@ class QAAgent:
             description=f"""
 Perform comprehensive quality assurance validation.
 
-PATIENT DATA:
-{patient_data.model_dump_json(indent=2)}
+Validate across:
+1. Clinical accuracy (score 0-100)
+2. NICE NG97 compliance
+3. Data completeness (%)
+4. Safety checks
 
-CLINICAL BRIEF:
-{clinical_brief.model_dump_json(indent=2)}
+Determine overall status: GREEN (≥90), AMBER (70-89), or RED (<70)
 
-ASSESSMENT PLAN:
-{assessment_plan.model_dump_json(indent=2)}
-
-NICE NG97 REQUIREMENTS:
-{nice_compliance_text}
-
-Validate across four dimensions:
-
-1. CLINICAL ACCURACY (score 0-100):
-   - Data consistency (demographics, history align?)
-   - Clinical logic (risks match conditions?)
-   - Appropriate clinical language
-   - No contradictions
-   
-   Flag issues as: error (blocks release), warning (review needed), info (minor)
-
-2. NICE NG97 COMPLIANCE:
-   - Assessment instruments meet guidelines
-   - Mandatory components included
-   - Contraindications considered
-   
-   List any gaps in compliance
-
-3. DATA COMPLETENESS (% complete):
-   - Required fields populated
-   - No "unknown" in critical fields
-   - Timeline consistency
-   
-   List missing fields
-
-4. SAFETY CHECKS:
-   - High-risk flags addressed
-   - Contraindications noted
-   - Safety mitigation present
-   
-   List any safety concerns
-
-OVERALL STATUS:
-- GREEN: Ready for clinical use (score ≥90, compliant, no safety issues)
-- AMBER: Needs review (score 70-89, minor gaps)
-- RED: Must fix before use (score <70, non-compliant, or safety issues)
-
-Provide actionable recommendations for any issues found.
-
-Return the data as valid JSON matching the QAResult schema.
+Return ONLY valid JSON. No markdown.
             """.strip(),
             expected_output="Quality assurance validation report as JSON",
             agent=self.agent,
         )
+    
+    def _clean_json_response(self, result: str) -> str:  # ADDED
+        """Clean Gemini response."""
+        result = result.strip()
+        if result.startswith("```"):
+            result = re.sub(r'^```(?:json)?\n', '', result)
+            result = re.sub(r'\n```$', '', result)
+        json_match = re.search(r'\{.*\}', result, re.DOTALL)
+        if json_match:
+            result = json_match.group(0)
+        return result.strip()
     
     def execute(
         self,
@@ -125,7 +87,9 @@ Return the data as valid JSON matching the QAResult schema.
         )
         result = task.execute()
         
+        result = self._clean_json_response(result)  # ADDED
+        
         qa_result = QAResult.model_validate_json(result)
         
         logger.info(f"QAAgent: Validation complete - Status: {qa_result.overall_status}")
-        return qa_result    
+        return qa_result

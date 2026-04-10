@@ -1,72 +1,80 @@
 from crewai import Agent, Task
-from langchain_anthropic import ChatAnthropic
-from aether.config.settings import settings
-from aether.schemas.clinical import ReferralInput, PatientData
+from aether.schemas.clinical import PatientData, ClinicalHistory
 from aether.utils.logger import logger
+from aether.config.llm_config import agent_llm
+import re
 
 
-class IntakeAgent:
-    """Clinical Intake Specialist Agent - Extracts structured patient data from referrals."""
+class ClinicalHistoryAgent:
+    """Clinical Historian Agent - Structures comprehensive patient clinical history."""
     
     def __init__(self):
-        self.llm = ChatAnthropic(
-            model=settings.claude_model,
-            anthropic_api_key=settings.anthropic_api_key,
-            temperature=0.2,
-            max_tokens=4096,
-        )
+        self.llm = agent_llm  # CHANGED: Using Gemini
         
         self.agent = Agent(
-            role="Clinical Intake Specialist",
-            goal="Extract structured patient demographics and referral information from GP letters",
+            role="Clinical Historian",
+            goal="Structure comprehensive patient clinical history with SNOMED-CT coding",
             backstory=(
-                "You are an expert clinical administrator with 15 years of experience "
-                "processing NHS referrals. You excel at extracting accurate patient information while "
-                "maintaining data quality and compliance with NHS data standards."
+                "You are a senior clinical informaticist specialized in dementia care pathways. "
+                "You have deep knowledge of SNOMED-CT coding, medication classification, and timeline "
+                "reconstruction from narrative clinical notes."
             ),
             llm=self.llm,
             verbose=True,
             allow_delegation=False,
         )
     
-    def create_task(self, referral_input: ReferralInput) -> Task:
-        """Create extraction task."""
+    def create_task(self, patient_data: PatientData, clinical_notes: str = None) -> Task:
+        """Create history structuring task."""
         return Task(
             description=f"""
-Extract complete patient demographic and referral information from the following GP referral letter.
+Analyze and structure the clinical history for this patient.
 
-REFERRAL LETTER:
-{referral_input.referral_text}
+PATIENT CONTEXT:
+Name: {patient_data.name.first} {patient_data.name.last}
+NHS#: {patient_data.nhs_number}
+Age: {patient_data.age} | Gender: {patient_data.gender}
 
-NHS Number (if provided): {referral_input.nhs_number or 'Not provided'}
+REFERRAL REASON:
+{patient_data.referral_reason}
 
-Extract:
-1. Patient full name (first and last)
-2. NHS number
-3. Date of birth and calculate age
-4. Gender
-5. Contact information (phone, email, address if available)
-6. GP practice details
-7. Referral reason and date
+{f"ADDITIONAL CLINICAL NOTES:\n{clinical_notes}" if clinical_notes else ""}
 
-Ensure all dates are in ISO 8601 format (YYYY-MM-DD).
-If information is missing, mark it as "Not provided" but do NOT fabricate data.
+Extract and structure:
+1. Medical conditions with SNOMED-CT codes
+2. Current medications with dosage and indication
+3. Known allergies
+4. Past psychiatric/cognitive assessments
+5. Timeline of significant clinical events
 
-Return the data as valid JSON matching the PatientData schema.
+Return ONLY valid JSON. No markdown, no explanations.
             """.strip(),
-            expected_output="Structured patient data as JSON",
+            expected_output="Structured clinical history as JSON",
             agent=self.agent,
         )
     
-    def execute(self, referral_input: ReferralInput) -> PatientData:
-        """Execute the intake agent."""
-        logger.info("IntakeAgent: Starting extraction")
+    def _clean_json_response(self, result: str) -> str:
+        """Clean Gemini response to extract pure JSON."""
+        result = result.strip()
+        if result.startswith("```"):
+            result = re.sub(r'^```(?:json)?\n', '', result)
+            result = re.sub(r'\n```$', '', result)
+        json_match = re.search(r'\{.*\}', result, re.DOTALL)
+        if json_match:
+            result = json_match.group(0)
+        return result.strip()
+    
+    def execute(self, patient_data: PatientData, clinical_notes: str = None) -> ClinicalHistory:
+        """Execute the clinical history agent."""
+        logger.info("ClinicalHistoryAgent: Structuring patient history")
         
-        task = self.create_task(referral_input)
+        task = self.create_task(patient_data, clinical_notes)
         result = task.execute()
         
-        # Parse and validate with Pydantic
-        patient_data = PatientData.model_validate_json(result)
+        # CHANGED: Clean Gemini response
+        result = self._clean_json_response(result)
         
-        logger.info(f"IntakeAgent: Extracted data for patient NHS#{patient_data.nhs_number}")
-        return patient_data
+        clinical_history = ClinicalHistory.model_validate_json(result)
+        
+        logger.info(f"ClinicalHistoryAgent: Structured {len(clinical_history.conditions)} conditions")
+        return clinical_history

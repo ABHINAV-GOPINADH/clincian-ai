@@ -1,31 +1,25 @@
 from datetime import date
 from crewai import Agent, Task
-from langchain_anthropic import ChatAnthropic
-from aether.config.settings import settings
+from aether.config.llm_config import agent_llm  # CHANGED
 from aether.schemas.clinical import (
     PatientData, ClinicalHistory, PatientProfile, AssessmentPlan, ClinicalBrief
 )
 from aether.utils.logger import logger
+import re  # ADDED
 
 
 class BriefWriterAgent:
-    """Clinical Documentation Specialist Agent - Creates concise clinical briefs."""
+    """Clinical Documentation Specialist Agent."""
     
     def __init__(self):
-        self.llm = ChatAnthropic(
-            model=settings.claude_model,
-            anthropic_api_key=settings.anthropic_api_key,
-            temperature=0.5,
-            max_tokens=16384,
-        )
+        self.llm = agent_llm  # CHANGED
         
         self.agent = Agent(
             role="Clinical Documentation Specialist",
             goal="Synthesize comprehensive clinical information into concise, actionable one-page briefs",
             backstory=(
                 "You are an expert clinical writer with a background in psychiatry and "
-                "neuropsychology. You excel at distilling complex clinical data into clear, structured "
-                "briefs that support clinical decision-making."
+                "neuropsychology. You excel at distilling complex clinical data into clear briefs."
             ),
             llm=self.llm,
             verbose=True,
@@ -44,66 +38,34 @@ class BriefWriterAgent:
         
         return Task(
             description=f"""
-Create a comprehensive one-page clinical brief for the assessing clinician.
+Create a comprehensive one-page clinical brief.
 
-PATIENT DATA:
-{patient_data.model_dump_json(indent=2)}
+Use all provided data to synthesize a professional clinical brief with:
+1. Header (patient details, date)
+2. Executive summary (max 500 chars)
+3. Presenting concerns
+4. Relevant history
+5. Risk summary
+6. Recommended assessments
+7. Key considerations
+8. NICE guidance alignment
 
-CLINICAL HISTORY:
-{clinical_history.model_dump_json(indent=2)}
-
-RISK PROFILE:
-{patient_profile.model_dump_json(indent=2)}
-
-ASSESSMENT PLAN:
-{assessment_plan.model_dump_json(indent=2)}
-
-Synthesize into a clinical brief with:
-
-1. HEADER:
-   - Patient name, NHS#, DOB
-   - Assessment date: {today}
-   - Clinician: [To be assigned]
-
-2. EXECUTIVE SUMMARY (max 500 chars):
-   - Age, referral reason
-   - Key clinical concerns
-   - Assessment priority level
-
-3. PRESENTING CONCERNS:
-   - Bullet list of cognitive/functional concerns
-   - Risk flags (prioritize high/critical)
-
-4. RELEVANT HISTORY:
-   - Medical: significant conditions
-   - Psychiatric: previous diagnoses, treatments
-   - Social: living situation, support network
-
-5. RISK SUMMARY:
-   - Critical and high-severity flags only
-   - Mitigation strategies
-
-6. RECOMMENDED ASSESSMENTS:
-   - Essential instruments with rationale
-   - Total estimated time
-   - Special considerations
-
-7. KEY CONSIDERATIONS:
-   - Clinical decision points
-   - Safety concerns
-   - Information gaps
-
-8. NICE GUIDANCE ALIGNMENT:
-   - How plan meets NG97 standards
-   - Compliance notes
-
-Write professionally, concisely, using clinical terminology.
-
-Return the data as valid JSON matching the ClinicalBrief schema.
+Return ONLY valid JSON. No markdown.
             """.strip(),
             expected_output="One-page clinical brief as JSON",
             agent=self.agent,
         )
+    
+    def _clean_json_response(self, result: str) -> str:  # ADDED
+        """Clean Gemini response."""
+        result = result.strip()
+        if result.startswith("```"):
+            result = re.sub(r'^```(?:json)?\n', '', result)
+            result = re.sub(r'\n```$', '', result)
+        json_match = re.search(r'\{.*\}', result, re.DOTALL)
+        if json_match:
+            result = json_match.group(0)
+        return result.strip()
     
     def execute(
         self,
@@ -117,6 +79,8 @@ Return the data as valid JSON matching the ClinicalBrief schema.
         
         task = self.create_task(patient_data, clinical_history, patient_profile, assessment_plan)
         result = task.execute()
+        
+        result = self._clean_json_response(result)  # ADDED
         
         clinical_brief = ClinicalBrief.model_validate_json(result)
         

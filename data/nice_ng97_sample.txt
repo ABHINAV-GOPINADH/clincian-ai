@@ -1,0 +1,91 @@
+NICE NG97 Dementia: Assessment, Management and Support
+
+1. COGNITIVE ASSESSMENT INSTRUMENTS
+
+1.1 General Cognitive Screening
+- Use standardised cognitive instruments for dementia assessment
+- MMSE (Mini-Mental State Examination): 30-point scale, widely validated
+- MoCA (Montreal Cognitive Assessment): More sensitive than MMSE for mild cognitive impairment
+- ACE-III (Addenbrooke's Cognitive Examination): Comprehensive assessment across multiple domains
+
+1.2 Memory Assessment
+- Episodic memory should be assessed using validated tools
+- Consider ADAS-Cog for clinical trials and monitoring progression
+- Semantic memory assessment important for differential diagnosis
+
+1.3 Executive Function
+- Trail Making Test for attention and executive function
+- Frontal Assessment Battery (FAB) for frontotemporal dementia
+
+2. FUNCTIONAL ASSESSMENT
+
+2.1 Activities of Daily Living
+- ADL (Activities of Daily Living): Basic self-care activities
+- IADL (Instrumental Activities of Daily Living): Complex daily tasks
+- Assessment should be collateral from family/carers
+
+2.2 Clinical Staging
+- CDR (Clinical Dementia Rating): Global staging tool
+- Rates cognition and function across 6 domains
+
+3. BEHAVIORAL AND PSYCHOLOGICAL SYMPTOMS
+
+3.1 Depression Screening
+- GDS (Geriatric Depression Scale): Validated in dementia populations
+- Screen for depression in all dementia assessments
+
+3.2 Neuropsychiatric Symptoms
+- NPI (Neuropsychiatric Inventory): Assesses 12 behavioral domains
+- Essential for care planning and caregiver support
+
+4. ASSESSMENT PATHWAY
+
+4.1 Initial Assessment
+- Comprehensive history from patient and informant
+- Cognitive screening using validated instruments
+- Functional assessment
+- Physical examination including neurological assessment
+
+4.2 Risk Assessment
+- Falls risk assessment
+- Driving safety evaluation
+- Medication review for polypharmacy and interactions
+- Safeguarding concerns including self-neglect
+
+4.3 Diagnostic Investigations
+- Blood tests to exclude reversible causes
+- Neuroimaging (CT or MRI) to exclude structural lesions
+- Consider specialized imaging (PET, SPECT) if diagnostic uncertainty
+
+5. QUALITY STANDARDS
+
+5.1 Timely Assessment
+- Assessment should be completed within 6 weeks of referral
+- Urgent assessment for rapidly progressive symptoms
+
+5.2 Multidisciplinary Approach
+- Involve appropriate specialists (neurology, psychiatry, geriatrics)
+- Access to neuropsychology for detailed cognitive assessment
+- Occupational therapy for functional assessment
+
+5.3 Person-Centered Care
+- Involve person with dementia in all decisions
+- Assess mental capacity for relevant decisions
+- Provide information in accessible formats
+- Support for carers and families
+
+6. CONTRAINDICATIONS AND SPECIAL CONSIDERATIONS
+
+6.1 Sensory Impairments
+- Adapt assessments for hearing or visual impairment
+- Use appropriate communication aids
+
+6.2 Cultural and Linguistic Factors
+- Use culturally appropriate and validated instruments
+- Provide interpreters when needed
+- Consider educational background when interpreting scores
+
+6.3 Physical Health
+- Ensure acute illness managed before cognitive assessment
+- Delirium must be excluded or resolved
+- Consider impact of medications on cognitive performance

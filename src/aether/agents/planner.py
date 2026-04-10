@@ -1,29 +1,23 @@
 from crewai import Agent, Task
-from langchain_anthropic import ChatAnthropic
-from aether.config.settings import settings
+from aether.config.llm_config import agent_llm  # CHANGED
 from aether.schemas.clinical import PatientData, PatientProfile, AssessmentPlan
 from aether.tools.rag_tool import nice_guidance_tool, nice_rag
 from aether.utils.logger import logger
+import re  # ADDED
 
 
 class AssessmentPlannerAgent:
-    """Neuropsychological Assessment Planner Agent - Designs NICE-compliant assessment batteries."""
+    """Neuropsychological Assessment Planner Agent."""
     
     def __init__(self):
-        self.llm = ChatAnthropic(
-            model=settings.claude_model,
-            anthropic_api_key=settings.anthropic_api_key,
-            temperature=0.3,
-            max_tokens=16384,
-        )
+        self.llm = agent_llm  # CHANGED
         
         self.agent = Agent(
             role="Neuropsychological Assessment Planner",
             goal="Design evidence-based, NICE NG97-compliant assessment batteries",
             backstory=(
                 "You are a principal clinical psychologist specializing in dementia assessment. "
-                "You design tailored neuropsychological batteries aligned with NICE NG97 guidelines, "
-                "considering patient complexity, safety, and diagnostic precision."
+                "You design tailored neuropsychological batteries aligned with NICE NG97 guidelines."
             ),
             llm=self.llm,
             tools=[nice_guidance_tool],
@@ -33,7 +27,6 @@ class AssessmentPlannerAgent:
     
     def create_task(self, patient_data: PatientData, patient_profile: PatientProfile) -> Task:
         """Create assessment planning task."""
-        # Retrieve NICE guidance
         nice_guidance = nice_rag.retrieve_guidance(
             "NICE NG97 dementia assessment instruments cognitive testing recommendations",
             top_k=5
@@ -54,9 +47,7 @@ class AssessmentPlannerAgent:
             description=f"""
 Design a comprehensive, NICE NG97-compliant assessment battery.
 
-PATIENT CONTEXT:
-{patient_data.name.first} {patient_data.name.last}, {patient_data.age}yo
-Referral: {patient_data.referral_reason}
+PATIENT: {patient_data.name.first} {patient_data.name.last}, {patient_data.age}yo
 
 RISK SUMMARY:
 {risk_flags_text}
@@ -64,44 +55,27 @@ RISK SUMMARY:
 COGNITIVE CONCERNS:
 {cognitive_concerns_text}
 
-COMPLEXITY: {patient_profile.complexity_summary.score}/10
-Factors: {', '.join(patient_profile.complexity_summary.factors)}
-
-NICE NG97 GUIDANCE EXCERPTS:
+NICE NG97 GUIDANCE:
 {nice_guidance_text}
 
-Design an assessment plan including:
+Design an assessment plan with instruments, prioritization, rationale, and duration.
 
-1. INSTRUMENTS selection from:
-   - Cognitive: ADAS-Cog, MMSE, MoCA, ACE-III
-   - Functional: ADL, IADL
-   - Staging: CDR
-   - Behavioral: GDS (depression), NPI (neuropsychiatric)
-
-2. PRIORITIZATION:
-   - Essential (must-do)
-   - Recommended (should-do)
-   - Optional (nice-to-have)
-
-3. RATIONALE for each instrument:
-   - Clinical indication
-   - Relevant to cognitive concerns
-   - NICE guideline alignment
-
-4. CONTRAINDICATIONS/SPECIAL CONSIDERATIONS:
-   - Patient-specific adaptations
-   - Safety concerns
-   - Communication needs
-
-5. ESTIMATED DURATION for each and total
-
-Ensure alignment with NICE NG97 recommendations and cite guidance where applicable.
-
-Return the data as valid JSON matching the AssessmentPlan schema.
+Return ONLY valid JSON. No markdown.
             """.strip(),
             expected_output="NICE-compliant assessment battery as JSON",
             agent=self.agent,
         )
+    
+    def _clean_json_response(self, result: str) -> str:  # ADDED
+        """Clean Gemini response."""
+        result = result.strip()
+        if result.startswith("```"):
+            result = re.sub(r'^```(?:json)?\n', '', result)
+            result = re.sub(r'\n```$', '', result)
+        json_match = re.search(r'\{.*\}', result, re.DOTALL)
+        if json_match:
+            result = json_match.group(0)
+        return result.strip()
     
     def execute(self, patient_data: PatientData, patient_profile: PatientProfile) -> AssessmentPlan:
         """Execute the assessment planner agent."""
@@ -109,6 +83,8 @@ Return the data as valid JSON matching the AssessmentPlan schema.
         
         task = self.create_task(patient_data, patient_profile)
         result = task.execute()
+        
+        result = self._clean_json_response(result)  # ADDED
         
         assessment_plan = AssessmentPlan.model_validate_json(result)
         
