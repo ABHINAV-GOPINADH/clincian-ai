@@ -2,6 +2,19 @@
 AETHER Multi-Agent Clinical Assessment System
 Entry point for the agent orchestration module
 """
+import sys
+import os
+
+# 1. Get the absolute path to the 'src' directory
+current_dir = os.path.dirname(os.path.abspath(__file__)) # Gets the 'aether' folder
+src_dir = os.path.dirname(current_dir)                   # Gets the 'src' folder
+
+# 2. Insert 'src' at the very front of Python's path list
+sys.path.insert(0, src_dir)
+
+# 3. NOW you can do your normal imports
+from aether.orchestrator.crew import AetherCrew
+# ... the rest of your imports and code ...
 
 from aether.orchestrator.crew import AetherCrew
 from aether.schemas.clinical import ReferralInput

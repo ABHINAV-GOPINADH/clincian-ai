@@ -1,15 +1,13 @@
-from crewai import Agent, Task
-from aether.config.llm_config import agent_llm  # CHANGED
+from crewai import Agent, Task, Crew
+from aether.config.llm_config import agent_llm 
 from aether.schemas.clinical import PatientData, ClinicalHistory, PatientProfile
 from aether.utils.logger import logger
-import re  # ADDED
-
 
 class ProfilerAgent:
     """Clinical Risk Profiler Agent - Identifies risks and cognitive indicators."""
     
     def __init__(self):
-        self.llm = agent_llm  # CHANGED
+        self.llm = agent_llm 
         
         self.agent = Agent(
             role="Clinical Risk Profiler",
@@ -26,15 +24,16 @@ class ProfilerAgent:
     
     def create_task(self, patient_data: PatientData, clinical_history: ClinicalHistory) -> Task:
         """Create profiling task."""
+        # Safely handle missing severity or dosage attributes
         conditions_text = "\n".join([
-            f"- {c.display} ({c.status}{f', {c.severity}' if c.severity else ''})"
+            f"- {c.display} ({c.status}{f', {c.severity}' if getattr(c, 'severity', None) else ''})"
             for c in clinical_history.conditions
-        ])
+        ]) if clinical_history.conditions else "None recorded"
         
         medications_text = "\n".join([
-            f"- {m.name}{f' {m.dosage}' if m.dosage else ''}"
+            f"- {m.name}{f' {m.dosage}' if getattr(m, 'dosage', None) else ''}"
             for m in clinical_history.medications
-        ])
+        ]) if clinical_history.medications else "None recorded"
         
         return Task(
             description=f"""
@@ -56,38 +55,48 @@ ALLERGIES:
 {', '.join(clinical_history.allergies) if clinical_history.allergies else 'None documented'}
 
 Analyze and identify:
-1. RISK FLAGS across categories
-2. COGNITIVE INDICATORS by domain
+1. RISK FLAGS across categories (e.g., fall risk, living alone)
+2. COGNITIVE INDICATORS by domain (e.g., memory, executive function)
 3. COMPLEXITY SCORE (1-10)
 4. INFORMATION GAPS
 
-Return ONLY valid JSON. No markdown.
+CRITICAL RULE: Return ONLY a valid JSON object matching the PatientProfile schema.
             """.strip(),
             expected_output="Comprehensive patient risk and cognitive profile as JSON",
             agent=self.agent,
+            output_pydantic=PatientProfile # <-- The CrewAI Magic!
         )
-    
-    def _clean_json_response(self, result: str) -> str:  # ADDED
-        """Clean Gemini response."""
-        result = result.strip()
-        if result.startswith("```"):
-            result = re.sub(r'^```(?:json)?\n', '', result)
-            result = re.sub(r'\n```$', '', result)
-        json_match = re.search(r'\{.*\}', result, re.DOTALL)
-        if json_match:
-            result = json_match.group(0)
-        return result.strip()
     
     def execute(self, patient_data: PatientData, clinical_history: ClinicalHistory) -> PatientProfile:
         """Execute the profiler agent."""
-        logger.info("ProfilerAgent: Analyzing patient profile")
+        logger.info("Step 1: ProfilerAgent execution started")
         
         task = self.create_task(patient_data, clinical_history)
-        result = task.execute()
         
-        result = self._clean_json_response(result)  # ADDED
+        logger.info("Step 2: Initializing CrewAI environment")
+        crew = Crew(
+            agents=[self.agent],
+            tasks=[task],
+            verbose=False,
+        )
         
-        patient_profile = PatientProfile.model_validate_json(result)
+        logger.info("Step 3: Kicking off Crew... (Waiting for LLM response)")
+        result = crew.kickoff()
         
-        logger.info(f"ProfilerAgent: Identified {len(patient_profile.risk_flags)} risk flags")
+        # SAFETY NET: Check if CrewAI's parser failed
+        if result.pydantic is None:
+            logger.warning("CrewAI native parsing returned None. Falling back to manual validation...")
+            import re
+            raw_text = result.raw
+            json_match = re.search(r'\{.*\}', raw_text, re.DOTALL)
+            if json_match:
+                raw_text = json_match.group(0)
+            patient_profile = PatientProfile.model_validate_json(raw_text)
+        else:
+            patient_profile = result.pydantic 
+        
+        # Safe logging in case risk_flags is None
+        num_flags = len(patient_profile.risk_flags) if getattr(patient_profile, 'risk_flags', None) else 0
+        logger.info(f"Step 4: Success! Identified {num_flags} risk flags.")
+        
         return patient_profile

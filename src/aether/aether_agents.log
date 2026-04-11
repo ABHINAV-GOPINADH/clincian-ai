@@ -1,0 +1,43 @@
+2026-04-11 22:14:20 | INFO     | __main__:main - Starting AETHER agent system demonstration
+2026-04-11 22:14:20 | INFO     | aether.orchestrator.context_store:initialize_context - Context initialized for encounter: c3401e77-4b72-4aff-bac5-a4996e030b3a
+2026-04-11 22:14:20 | INFO     | __main__:<lambda> - Progress: intake
+2026-04-11 22:14:20 | INFO     | aether.agents.intake:execute - IntakeAgent: Starting extraction
+2026-04-11 22:14:32 | INFO     | aether.agents.intake:execute - IntakeAgent: Extracted data for patient NHS#123-456-7890
+2026-04-11 22:14:32 | INFO     | __main__:<lambda> - Progress: intake
+2026-04-11 22:14:32 | INFO     | __main__:<lambda> - Progress: history
+2026-04-11 22:14:32 | INFO     | aether.agents.history:execute - Step 1: ClinicalHistoryAgent execution started
+2026-04-11 22:14:32 | INFO     | aether.agents.history:execute - Step 2: Creating Task with prompt instructions
+2026-04-11 22:14:32 | INFO     | aether.agents.history:execute - Step 3: Initializing CrewAI environment
+2026-04-11 22:14:32 | INFO     | aether.agents.history:execute - Step 4: Kicking off Crew... (Waiting for LLM response)
+2026-04-11 22:14:52 | INFO     | aether.agents.history:execute - Step 5: LLM response received, extracting Pydantic model
+2026-04-11 22:14:52 | INFO     | aether.agents.history:execute - Step 6: Success! Structured 1 conditions and 2 medications.
+2026-04-11 22:14:52 | INFO     | __main__:<lambda> - Progress: history
+2026-04-11 22:14:52 | INFO     | __main__:<lambda> - Progress: profiler
+2026-04-11 22:14:52 | INFO     | aether.agents.profiler:execute - Step 1: ProfilerAgent execution started
+2026-04-11 22:14:52 | INFO     | aether.agents.profiler:execute - Step 2: Initializing CrewAI environment
+2026-04-11 22:14:52 | INFO     | aether.agents.profiler:execute - Step 3: Kicking off Crew... (Waiting for LLM response)
+2026-04-11 22:15:27 | INFO     | aether.agents.profiler:execute - Step 4: Success! Identified 4 risk flags.
+2026-04-11 22:15:27 | INFO     | __main__:<lambda> - Progress: profiler
+2026-04-11 22:15:27 | INFO     | __main__:<lambda> - Progress: planner
+2026-04-11 22:15:27 | INFO     | aether.agents.planner:execute - Step 1: AssessmentPlannerAgent execution started
+2026-04-11 22:15:27 | INFO     | aether.tools.rag_tool:_initialize - Initializing Pinecone connection...
+2026-04-11 22:15:49 | INFO     | aether.tools.rag_tool:_initialize - ✅ NICE NG97 RAG tool initialized successfully (local embeddings)
+2026-04-11 22:15:51 | INFO     | aether.agents.planner:execute - Step 2: Initializing CrewAI environment
+2026-04-11 22:15:51 | INFO     | aether.agents.planner:execute - Step 3: Kicking off Crew... (Waiting for LLM & RAG tools)
+2026-04-11 22:16:19 | INFO     | aether.agents.planner:execute - Step 4: Success! Planned 7 instruments.
+2026-04-11 22:16:19 | INFO     | __main__:<lambda> - Progress: planner
+2026-04-11 22:16:19 | INFO     | __main__:<lambda> - Progress: brief
+2026-04-11 22:16:19 | INFO     | aether.agents.brief_writer:execute - Step 1: BriefWriterAgent execution started
+2026-04-11 22:16:19 | INFO     | aether.agents.brief_writer:execute - Step 2: Initializing CrewAI environment
+2026-04-11 22:16:19 | INFO     | aether.agents.brief_writer:execute - Step 3: Kicking off Crew... (Waiting for LLM to synthesize data)
+2026-04-11 22:17:01 | INFO     | aether.agents.brief_writer:execute - Step 4: Success! Brief completed.
+2026-04-11 22:17:01 | INFO     | __main__:<lambda> - Progress: brief
+2026-04-11 22:17:01 | INFO     | __main__:<lambda> - Progress: qa
+2026-04-11 22:17:01 | INFO     | aether.agents.qa:execute - Step 1: QAAgent execution started
+2026-04-11 22:17:03 | INFO     | aether.agents.qa:execute - Step 2: Initializing CrewAI environment
+2026-04-11 22:17:03 | INFO     | aether.agents.qa:execute - Step 3: Kicking off Crew... (Waiting for LLM audit)
+2026-04-11 22:17:21 | INFO     | aether.agents.qa:execute - Step 4: Validation complete - Status: QAStatus.GREEN
+2026-04-11 22:17:21 | INFO     | __main__:<lambda> - Progress: qa
+2026-04-11 22:17:21 | INFO     | aether.orchestrator.context_store:clear_context - Context cleared for encounter: c3401e77-4b72-4aff-bac5-a4996e030b3a
+2026-04-11 22:17:21 | INFO     | __main__:<lambda> - Progress: complete
+2026-04-11 22:17:21 | INFO     | __main__:main - Final result: Status=QAStatus.GREEN, ProcessingTime=180793ms

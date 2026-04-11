@@ -7,7 +7,7 @@ from langchain_core.documents import Document
 from pinecone import Pinecone
 from aether.config.settings import settings
 from aether.utils.logger import logger
-
+from crewai.tools import tool
 
 class NICEGuidelineRAG:
     """RAG tool for retrieving NICE NG97 dementia guidelines."""
@@ -115,7 +115,8 @@ nice_rag = NICEGuidelineRAG()
 
 
 # Simple function wrapper for CrewAI tools
-def nice_guidance_retrieval(query: str) -> str:
+@tool("NICE NG97 Guidance Retrieval")
+def nice_guidance_tool(query: str) -> str:
     """
     Retrieve NICE NG97 dementia assessment guidelines.
     
