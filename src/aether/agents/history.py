@@ -9,7 +9,7 @@ class ClinicalHistoryAgent:
     """Clinical Historian Agent - Structures comprehensive patient clinical history."""
     
     def __init__(self):
-        self.llm = agent_llm  # CHANGED: Using Gemini
+        self.llm = agent_llm 
         
         self.agent = Agent(
             role="Clinical Historian",
@@ -24,8 +24,8 @@ class ClinicalHistoryAgent:
             allow_delegation=False,
         )
     
-    def create_task(self, patient_data: PatientData, clinical_notes: str = None) -> Task:
-        """Create history structuring task."""
+    # CHANGED: clinical_notes is now strictly required
+    def create_task(self, patient_data: PatientData, clinical_notes: str) -> Task:
         return Task(
             description=f"""
             Analyze and structure the clinical history for this patient.
@@ -38,28 +38,21 @@ class ClinicalHistoryAgent:
             REFERRAL REASON:
             {patient_data.referral_reason}
 
-            {f"ADDITIONAL CLINICAL NOTES:\n{clinical_notes}" if clinical_notes else ""}
+            RAW CLINICAL NOTES:
+            {clinical_notes}
 
-            Extract and structure ONLY what is explicitly stated:
-            1. Medical conditions (infer reasonable SNOMED-CT text codes if applicable)
-            2. Current medications with dosage 
-            3. Known allergies
-            4. Past psychiatric/cognitive assessments
-            5. Timeline of significant clinical events
+            CRITICAL EXTRACTION RULES:
+                1. ONLY extract explicit medical diagnoses mentioned in the text.
+                2. DO NOT hallucinate or invent SNOMED, ICD-10, or any other medical codes. If a specific code is not explicitly written next to the condition in the text, you MUST set the `code` field to `null`.
+                3. NEVER use administrative codes (e.g., ODS codes like F83006, GMC numbers, NHS numbers, or postal codes) as medical diagnostic codes. 
+                4. Do not guess the medical history. If it is not in the text, leave the list empty.
 
-            CRITICAL RULE: You MUST return a valid JSON object using EXACTLY these key names. Do not deviate:
-            - "conditions"
-            - "medications"
-            - "allergies"
-            - "cognitive_assessments"
-            - "significant_events"
-
-            If a specific piece of information is missing, return an empty list `[]`. Do not guess.
+                Return ONLY a valid JSON object matching the ClinicalHistory schema.
             """.strip(),
-                        expected_output="A structured JSON object matching the requested schema exactly.",
-                        agent=self.agent,
-                        output_pydantic=ClinicalHistory 
-                    )
+            expected_output="A structured JSON object representing the patient's history.",
+            agent=self.agent,
+            output_pydantic=ClinicalHistory 
+        )
     
     def _clean_json_response(self, result: str) -> str:
         """Clean Gemini response to extract pure JSON."""
@@ -75,6 +68,11 @@ class ClinicalHistoryAgent:
     def execute(self, patient_data: PatientData, clinical_notes: str = None) -> ClinicalHistory:
         """Execute the clinical history agent."""
         logger.info("Step 1: ClinicalHistoryAgent execution started")
+
+        # ADD THIS SAFEGUARD: Stop the pipeline if the text is missing
+        if not clinical_notes or not clinical_notes.strip():
+            logger.error("CRITICAL: No raw clinical notes provided. Aborting to prevent hallucination.")
+            return ClinicalHistory(conditions=[], medications=[], allergies=[], past_assessments=[], timeline_events=[])
         
         logger.info("Step 2: Creating Task with prompt instructions")
         task = self.create_task(patient_data, clinical_notes)

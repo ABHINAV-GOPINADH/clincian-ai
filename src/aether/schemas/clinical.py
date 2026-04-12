@@ -1,8 +1,8 @@
 from datetime import date, datetime
 from enum import Enum
 from typing import List, Optional, Any
-from pydantic import BaseModel, Field, EmailStr
-
+from pydantic import BaseModel, Field, EmailStr, field_validator
+import re
 
 # ========== ENUMS ==========
 class Gender(str, Enum):
@@ -117,11 +117,30 @@ class PatientData(BaseModel):
 
 # ========== CLINICAL HISTORY SCHEMAS ==========
 class Condition(BaseModel):
-    code: str = Field(..., description="SNOMED-CT code")
+    code: Optional[str] = None
     display: str
-    onset_date: Optional[str] = None
-    status: ConditionStatus
-    severity: Optional[Severity] = None
+    status: str
+    severity: Optional[str] = None
+
+    @field_validator('code')
+    @classmethod
+    def validate_clinical_code(cls, v):
+        if v is None:
+            return v
+            
+        # Strip whitespace
+        v = v.strip()
+        
+        # Block standard UK ODS Code formats (1 letter + 5 digits)
+        if re.match(r'^[A-Z]\d{5}$', v):
+            raise ValueError(f"Rejected: '{v}' matches an ODS Clinic Code format, not a clinical diagnostic code.")
+            
+        # Block common text hallucinations
+        invalid_keywords = ['ODS', 'GMC', 'NHS', 'Clinic']
+        if any(keyword in v.upper() for keyword in invalid_keywords):
+            raise ValueError(f"Rejected: '{v}' appears to be an administrative number.")
+            
+        return v
 
 
 class Medication(BaseModel):

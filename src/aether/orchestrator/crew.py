@@ -44,7 +44,7 @@ class AetherCrew:
             
             # STEP 2: Clinical History - Structure medical history
             logger.info("📚 STEP 2: Clinical history structuring")
-            clinical_history = self.history_agent.execute(patient_data)
+            clinical_history = self.history_agent.execute(patient_data, referral_input.referral_text)
             context_store.update_context(encounter_id, patient_history=clinical_history)
             context_store.add_audit_entry(
                 encounter_id, "ClinicalHistoryAgent", "structured_history", clinical_history.model_dump()
@@ -145,7 +145,7 @@ class AetherCrew:
             
             # STEP 2
             on_progress("history", {"status": "running", "message": "Structuring clinical history..."})
-            clinical_history = self.history_agent.execute(patient_data)
+            clinical_history = self.history_agent.execute(patient_data,referral_input.referral_text)
             on_progress("history", {"status": "complete", "data": clinical_history.model_dump()})
             
             # STEP 3
