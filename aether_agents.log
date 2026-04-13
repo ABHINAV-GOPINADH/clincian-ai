@@ -744,3 +744,281 @@ contact_info.email
 2026-04-10 17:19:42 | INFO     | __main__:test_clinical_history_agent - TEST STEP C: Passing data to agent.execute()
 2026-04-10 17:19:42 | INFO     | aether.agents.history:execute - ClinicalHistoryAgent: Structuring patient history
 2026-04-10 17:19:42 | ERROR    | __main__:test_clinical_history_agent - ❌ Test failed during execution: 'Task' object has no attribute 'execute'
+2026-04-11 10:04:25 | INFO     | __main__:test_intake_agent - ================================================================================
+2026-04-11 10:04:25 | INFO     | __main__:test_intake_agent - Testing Intake Agent
+2026-04-11 10:04:25 | INFO     | __main__:test_intake_agent - ================================================================================
+2026-04-11 10:04:27 | INFO     | __main__:test_intake_agent - 
+📥 Processing referral...
+2026-04-11 10:04:27 | INFO     | aether.agents.intake:execute - IntakeAgent: Starting extraction
+2026-04-11 10:04:30 | ERROR    | __main__:test_intake_agent - ❌ Test failed: Model llama3.2:3b not found: Error code: 404 - {'error': {'message': "model 'llama3.2:3b' not found", 'type': 'not_found_error', 'param': None, 'code': None}}
+2026-04-11 11:33:55 | INFO     | __main__:test_intake_agent - ================================================================================
+2026-04-11 11:33:55 | INFO     | __main__:test_intake_agent - Testing Intake Agent
+2026-04-11 11:33:55 | INFO     | __main__:test_intake_agent - ================================================================================
+2026-04-11 11:33:58 | INFO     | __main__:test_intake_agent - 
+📥 Processing referral...
+2026-04-11 11:33:58 | INFO     | aether.agents.intake:execute - IntakeAgent: Starting extraction
+2026-04-11 11:34:01 | ERROR    | __main__:test_intake_agent - ❌ Test failed: Model llama3.2:3b not found: Error code: 404 - {'error': {'message': "model 'llama3.2:3b' not found", 'type': 'not_found_error', 'param': None, 'code': None}}
+2026-04-11 11:37:39 | INFO     | __main__:test_intake_agent - ================================================================================
+2026-04-11 11:37:39 | INFO     | __main__:test_intake_agent - Testing Intake Agent
+2026-04-11 11:37:39 | INFO     | __main__:test_intake_agent - ================================================================================
+2026-04-11 11:37:41 | INFO     | __main__:test_intake_agent - 
+📥 Processing referral...
+2026-04-11 11:37:41 | INFO     | aether.agents.intake:execute - IntakeAgent: Starting extraction
+2026-04-11 11:39:23 | INFO     | aether.agents.intake:execute - IntakeAgent: Extracted data for patient NHS#987-654-3210
+2026-04-11 11:39:23 | INFO     | __main__:test_intake_agent - 
+✅ Extraction successful!
+2026-04-11 11:39:23 | INFO     | __main__:test_intake_agent - 
+📊 Extracted Patient Data:
+2026-04-11 11:39:23 | INFO     | __main__:test_intake_agent -    Name: Mary Higgins
+2026-04-11 11:39:23 | INFO     | __main__:test_intake_agent -    NHS#: 987-654-3210
+2026-04-11 11:39:23 | INFO     | __main__:test_intake_agent -    Age: 71
+2026-04-11 11:39:23 | INFO     | __main__:test_intake_agent -    DOB: 1955-08-12
+2026-04-11 11:39:23 | INFO     | __main__:test_intake_agent -    Gender: Gender.FEMALE
+2026-04-11 11:39:23 | INFO     | __main__:test_intake_agent -    GP: Riverside Health Clinic
+2026-04-11 11:39:23 | INFO     | __main__:test_intake_agent -    Referral reason: persistent right knee joint pain...
+2026-04-11 11:44:38 | INFO     | __main__:test_clinical_history_agent - ================================================================================
+2026-04-11 11:44:38 | INFO     | __main__:test_clinical_history_agent - 🧪 Testing Clinical History Agent
+2026-04-11 11:44:38 | INFO     | __main__:test_clinical_history_agent - ================================================================================
+2026-04-11 11:44:38 | INFO     | __main__:test_clinical_history_agent - TEST STEP A: Preparing mock PatientData and Notes
+2026-04-11 11:44:38 | INFO     | __main__:test_clinical_history_agent - TEST STEP B: Initializing ClinicalHistoryAgent instance
+2026-04-11 11:44:38 | INFO     | __main__:test_clinical_history_agent - TEST STEP C: Passing data to agent.execute()
+2026-04-11 11:44:38 | INFO     | aether.agents.history:execute - ClinicalHistoryAgent: Structuring patient history
+2026-04-11 11:44:38 | ERROR    | __main__:test_clinical_history_agent - ❌ Test failed during execution: 'Task' object has no attribute 'execute'
+2026-04-11 11:49:21 | INFO     | __main__:test_clinical_history_agent - ================================================================================
+2026-04-11 11:49:21 | INFO     | __main__:test_clinical_history_agent - 🧪 Testing Clinical History Agent
+2026-04-11 11:49:21 | INFO     | __main__:test_clinical_history_agent - ================================================================================
+2026-04-11 11:49:21 | INFO     | __main__:test_clinical_history_agent - TEST STEP A: Preparing mock PatientData and Notes
+2026-04-11 11:49:21 | INFO     | __main__:test_clinical_history_agent - TEST STEP B: Initializing ClinicalHistoryAgent instance
+2026-04-11 11:49:21 | INFO     | __main__:test_clinical_history_agent - TEST STEP C: Passing data to agent.execute()
+2026-04-11 11:49:21 | INFO     | aether.agents.history:execute - Step 1: ClinicalHistoryAgent execution started
+2026-04-11 11:49:21 | INFO     | aether.agents.history:execute - Step 2: Creating Task with prompt instructions
+2026-04-11 11:49:21 | INFO     | aether.agents.history:execute - Step 3: Initializing CrewAI environment
+2026-04-11 11:49:21 | INFO     | aether.agents.history:execute - Step 4: Kicking off Crew... (Waiting for LLM response)
+2026-04-11 11:49:33 | INFO     | aether.agents.history:execute - Step 5: LLM response received, extracting Pydantic model
+2026-04-11 11:49:33 | ERROR    | __main__:test_clinical_history_agent - ❌ Test failed during execution: 'NoneType' object has no attribute 'conditions'
+2026-04-11 14:15:13 | INFO     | __main__:test_clinical_history_agent - ================================================================================
+2026-04-11 14:15:13 | INFO     | __main__:test_clinical_history_agent - 🧪 Testing Clinical History Agent
+2026-04-11 14:15:13 | INFO     | __main__:test_clinical_history_agent - ================================================================================
+2026-04-11 14:15:13 | INFO     | __main__:test_clinical_history_agent - TEST STEP A: Preparing mock PatientData and Notes
+2026-04-11 14:15:13 | INFO     | __main__:test_clinical_history_agent - TEST STEP B: Initializing ClinicalHistoryAgent instance
+2026-04-11 14:15:13 | INFO     | __main__:test_clinical_history_agent - TEST STEP C: Passing data to agent.execute()
+2026-04-11 14:15:13 | INFO     | aether.agents.history:execute - Step 1: ClinicalHistoryAgent execution started
+2026-04-11 14:15:13 | INFO     | aether.agents.history:execute - Step 2: Creating Task with prompt instructions
+2026-04-11 14:15:13 | INFO     | aether.agents.history:execute - Step 3: Initializing CrewAI environment
+2026-04-11 14:15:13 | INFO     | aether.agents.history:execute - Step 4: Kicking off Crew... (Waiting for LLM response)
+2026-04-11 14:15:24 | INFO     | aether.agents.history:execute - Step 5: LLM response received, extracting Pydantic model
+2026-04-11 14:15:24 | ERROR    | __main__:test_clinical_history_agent - ❌ Test failed during execution: 'NoneType' object has no attribute 'conditions'
+2026-04-11 14:34:13 | INFO     | __main__:test_clinical_history_agent - ================================================================================
+2026-04-11 14:34:13 | INFO     | __main__:test_clinical_history_agent - 🧪 Testing Clinical History Agent
+2026-04-11 14:34:13 | INFO     | __main__:test_clinical_history_agent - ================================================================================
+2026-04-11 14:34:13 | INFO     | __main__:test_clinical_history_agent - TEST STEP A: Preparing mock PatientData and Notes
+2026-04-11 14:34:13 | INFO     | __main__:test_clinical_history_agent - TEST STEP B: Initializing ClinicalHistoryAgent instance
+2026-04-11 14:34:13 | INFO     | __main__:test_clinical_history_agent - TEST STEP C: Passing data to agent.execute()
+2026-04-11 14:34:13 | INFO     | aether.agents.history:execute - Step 1: ClinicalHistoryAgent execution started
+2026-04-11 14:34:13 | INFO     | aether.agents.history:execute - Step 2: Creating Task with prompt instructions
+2026-04-11 14:34:13 | INFO     | aether.agents.history:execute - Step 3: Initializing CrewAI environment
+2026-04-11 14:34:13 | INFO     | aether.agents.history:execute - Step 4: Kicking off Crew... (Waiting for LLM response)
+2026-04-11 14:34:29 | INFO     | aether.agents.history:execute - Step 5: LLM response received, extracting Pydantic model
+2026-04-11 14:34:29 | INFO     | aether.agents.history:execute - Step 6: Success! Structured 1 conditions and 2 medications.
+2026-04-11 14:34:29 | INFO     | __main__:test_clinical_history_agent - TEST STEP D: Execution finished. Printing results:
+2026-04-11 14:34:29 | ERROR    | __main__:test_clinical_history_agent - ❌ Test failed during execution: 'Condition' object has no attribute 'name'
+2026-04-11 14:48:05 | INFO     | __main__:test_clinical_history_agent - ================================================================================
+2026-04-11 14:48:05 | INFO     | __main__:test_clinical_history_agent - 🧪 Testing Clinical History Agent
+2026-04-11 14:48:05 | INFO     | __main__:test_clinical_history_agent - ================================================================================
+2026-04-11 14:48:05 | INFO     | __main__:test_clinical_history_agent - TEST STEP A: Preparing mock PatientData and Notes
+2026-04-11 14:48:05 | INFO     | __main__:test_clinical_history_agent - TEST STEP B: Initializing ClinicalHistoryAgent instance
+2026-04-11 14:48:05 | INFO     | __main__:test_clinical_history_agent - TEST STEP C: Passing data to agent.execute()
+2026-04-11 14:48:05 | INFO     | aether.agents.history:execute - Step 1: ClinicalHistoryAgent execution started
+2026-04-11 14:48:05 | INFO     | aether.agents.history:execute - Step 2: Creating Task with prompt instructions
+2026-04-11 14:48:05 | INFO     | aether.agents.history:execute - Step 3: Initializing CrewAI environment
+2026-04-11 14:48:05 | INFO     | aether.agents.history:execute - Step 4: Kicking off Crew... (Waiting for LLM response)
+2026-04-11 14:48:25 | INFO     | aether.agents.history:execute - Step 5: LLM response received, extracting Pydantic model
+2026-04-11 14:48:25 | INFO     | aether.agents.history:execute - Step 6: Success! Structured 3 conditions and 2 medications.
+2026-04-11 14:48:25 | INFO     | __main__:test_clinical_history_agent - TEST STEP D: Execution finished. Printing results:
+2026-04-11 14:48:25 | ERROR    | __main__:test_clinical_history_agent - ❌ Test failed during execution: 'str' object has no attribute 'model_dump'
+2026-04-11 14:50:13 | INFO     | __main__:test_clinical_history_agent - ================================================================================
+2026-04-11 14:50:13 | INFO     | __main__:test_clinical_history_agent - 🧪 Testing Clinical History Agent
+2026-04-11 14:50:13 | INFO     | __main__:test_clinical_history_agent - ================================================================================
+2026-04-11 14:50:13 | INFO     | __main__:test_clinical_history_agent - TEST STEP A: Preparing mock PatientData and Notes
+2026-04-11 14:50:13 | INFO     | __main__:test_clinical_history_agent - TEST STEP B: Initializing ClinicalHistoryAgent instance
+2026-04-11 14:50:13 | INFO     | __main__:test_clinical_history_agent - TEST STEP C: Passing data to agent.execute()
+2026-04-11 14:50:13 | INFO     | aether.agents.history:execute - Step 1: ClinicalHistoryAgent execution started
+2026-04-11 14:50:13 | INFO     | aether.agents.history:execute - Step 2: Creating Task with prompt instructions
+2026-04-11 14:50:13 | INFO     | aether.agents.history:execute - Step 3: Initializing CrewAI environment
+2026-04-11 14:50:13 | INFO     | aether.agents.history:execute - Step 4: Kicking off Crew... (Waiting for LLM response)
+2026-04-11 14:50:28 | INFO     | aether.agents.history:execute - Step 5: LLM response received, extracting Pydantic model
+2026-04-11 14:50:28 | INFO     | aether.agents.history:execute - Step 6: Success! Structured 2 conditions and 2 medications.
+2026-04-11 14:50:28 | INFO     | __main__:test_clinical_history_agent - TEST STEP D: Execution finished. Printing results:
+2026-04-11 15:05:59 | INFO     | __main__:test_profiler_agent - ================================================================================
+2026-04-11 15:05:59 | INFO     | __main__:test_profiler_agent - 🧪 Testing Clinical Profiler Agent
+2026-04-11 15:05:59 | INFO     | __main__:test_profiler_agent - ================================================================================
+2026-04-11 15:05:59 | INFO     | __main__:test_profiler_agent - TEST STEP A: Preparing mock PatientData
+2026-04-11 15:05:59 | INFO     | __main__:test_profiler_agent - TEST STEP B: Preparing mock ClinicalHistory
+2026-04-11 20:02:59 | INFO     | __main__:test_profiler_agent - ================================================================================
+2026-04-11 20:02:59 | INFO     | __main__:test_profiler_agent - 🧪 Testing Clinical Profiler Agent
+2026-04-11 20:02:59 | INFO     | __main__:test_profiler_agent - ================================================================================
+2026-04-11 20:02:59 | INFO     | __main__:test_profiler_agent - TEST STEP A: Preparing mock PatientData
+2026-04-11 20:02:59 | INFO     | __main__:test_profiler_agent - TEST STEP B: Preparing mock ClinicalHistory
+2026-04-11 20:10:13 | INFO     | __main__:test_profiler_agent - ================================================================================
+2026-04-11 20:10:13 | INFO     | __main__:test_profiler_agent - 🧪 Testing Clinical Profiler Agent
+2026-04-11 20:10:13 | INFO     | __main__:test_profiler_agent - ================================================================================
+2026-04-11 20:10:13 | INFO     | __main__:test_profiler_agent - TEST STEP A: Preparing mock PatientData
+2026-04-11 20:10:13 | INFO     | __main__:test_profiler_agent - TEST STEP B: Preparing mock ClinicalHistory
+2026-04-11 20:10:13 | INFO     | __main__:test_profiler_agent - TEST STEP C: Initializing ProfilerAgent instance
+2026-04-11 20:10:13 | INFO     | __main__:test_profiler_agent - TEST STEP D: Passing data to agent.execute()
+2026-04-11 20:10:13 | INFO     | aether.agents.profiler:execute - Step 1: ProfilerAgent execution started
+2026-04-11 20:10:13 | INFO     | aether.agents.profiler:execute - Step 2: Initializing CrewAI environment
+2026-04-11 20:10:13 | INFO     | aether.agents.profiler:execute - Step 3: Kicking off Crew... (Waiting for LLM response)
+2026-04-11 20:10:43 | INFO     | aether.agents.profiler:execute - Step 4: Success! Identified 3 risk flags.
+2026-04-11 20:10:43 | INFO     | __main__:test_profiler_agent - TEST STEP E: Execution finished. Printing results:
+2026-04-11 20:27:01 | INFO     | __main__:test_planner_agent - ================================================================================
+2026-04-11 20:27:01 | INFO     | __main__:test_planner_agent - 🧪 Testing Assessment Planner Agent
+2026-04-11 20:27:01 | INFO     | __main__:test_planner_agent - ================================================================================
+2026-04-11 20:27:01 | INFO     | __main__:test_planner_agent - TEST STEP A: Preparing mock PatientData
+2026-04-11 20:27:01 | INFO     | __main__:test_planner_agent - TEST STEP B: Preparing mock PatientProfile
+2026-04-11 20:27:01 | INFO     | __main__:test_planner_agent - TEST STEP C: Initializing AssessmentPlannerAgent instance
+2026-04-11 20:27:01 | ERROR    | __main__:test_planner_agent - ❌ Test failed during execution: 1 validation error for Agent
+tools.0
+  Input should be a valid dictionary or instance of BaseTool [type=model_type, input_value=StructuredTool(name='NICE... at 0x0000029B1A6CA700>), input_type=StructuredTool]
+    For further information visit https://errors.pydantic.dev/2.11/v/model_type
+2026-04-11 20:29:00 | INFO     | __main__:test_planner_agent - ================================================================================
+2026-04-11 20:29:00 | INFO     | __main__:test_planner_agent - 🧪 Testing Assessment Planner Agent
+2026-04-11 20:29:00 | INFO     | __main__:test_planner_agent - ================================================================================
+2026-04-11 20:29:00 | INFO     | __main__:test_planner_agent - TEST STEP A: Preparing mock PatientData
+2026-04-11 20:29:00 | INFO     | __main__:test_planner_agent - TEST STEP B: Preparing mock PatientProfile
+2026-04-11 20:29:00 | INFO     | __main__:test_planner_agent - TEST STEP C: Initializing AssessmentPlannerAgent instance
+2026-04-11 20:29:00 | INFO     | __main__:test_planner_agent - TEST STEP D: Passing data to agent.execute()
+2026-04-11 20:29:00 | INFO     | aether.agents.planner:execute - Step 1: AssessmentPlannerAgent execution started
+2026-04-11 20:29:00 | INFO     | aether.tools.rag_tool:_initialize - Initializing Pinecone connection...
+2026-04-11 20:30:17 | INFO     | aether.tools.rag_tool:_initialize - ✅ NICE NG97 RAG tool initialized successfully (local embeddings)
+2026-04-11 20:30:19 | INFO     | aether.agents.planner:execute - Step 2: Initializing CrewAI environment
+2026-04-11 20:30:19 | INFO     | aether.agents.planner:execute - Step 3: Kicking off Crew... (Waiting for LLM & RAG tools)
+2026-04-11 20:30:56 | INFO     | aether.agents.planner:execute - Step 4: Success! Planned 5 instruments.
+2026-04-11 20:30:56 | INFO     | __main__:test_planner_agent - TEST STEP E: Execution finished. Printing results:
+2026-04-11 21:15:53 | INFO     | __main__:test_planner_agent - ================================================================================
+2026-04-11 21:15:53 | INFO     | __main__:test_planner_agent - 🧪 Testing Assessment Planner Agent
+2026-04-11 21:15:53 | INFO     | __main__:test_planner_agent - ================================================================================
+2026-04-11 21:15:53 | INFO     | __main__:test_planner_agent - TEST STEP A: Preparing mock PatientData
+2026-04-11 21:15:53 | INFO     | __main__:test_planner_agent - TEST STEP B: Preparing mock PatientProfile
+2026-04-11 21:15:53 | INFO     | __main__:test_planner_agent - TEST STEP C: Initializing AssessmentPlannerAgent instance
+2026-04-11 21:15:53 | INFO     | __main__:test_planner_agent - TEST STEP D: Passing data to agent.execute()
+2026-04-11 21:15:53 | INFO     | aether.agents.planner:execute - Step 1: AssessmentPlannerAgent execution started
+2026-04-11 21:15:53 | INFO     | aether.tools.rag_tool:_initialize - Initializing Pinecone connection...
+2026-04-11 21:16:12 | INFO     | aether.tools.rag_tool:_initialize - ✅ NICE NG97 RAG tool initialized successfully (local embeddings)
+2026-04-11 21:16:14 | INFO     | aether.agents.planner:execute - Step 2: Initializing CrewAI environment
+2026-04-11 21:16:14 | INFO     | aether.agents.planner:execute - Step 3: Kicking off Crew... (Waiting for LLM & RAG tools)
+2026-04-11 21:16:51 | INFO     | aether.agents.planner:execute - Step 4: Success! Planned 8 instruments.
+2026-04-11 21:16:51 | INFO     | __main__:test_planner_agent - TEST STEP E: Execution finished. Printing results:
+2026-04-11 21:49:50 | INFO     | __main__:test_brief_writer_agent - ================================================================================
+2026-04-11 21:49:50 | INFO     | __main__:test_brief_writer_agent - 🧪 Testing Clinical Brief Writer Agent
+2026-04-11 21:49:50 | INFO     | __main__:test_brief_writer_agent - ================================================================================
+2026-04-11 21:49:50 | INFO     | __main__:test_brief_writer_agent - Initializing BriefWriterAgent instance...
+2026-04-11 21:49:50 | INFO     | __main__:test_brief_writer_agent - Passing all 4 data modules to agent.execute()...
+2026-04-11 21:49:50 | INFO     | aether.agents.brief_writer:execute - Step 1: BriefWriterAgent execution started
+2026-04-11 21:49:50 | INFO     | aether.agents.brief_writer:execute - Step 2: Initializing CrewAI environment
+2026-04-11 21:49:50 | INFO     | aether.agents.brief_writer:execute - Step 3: Kicking off Crew... (Waiting for LLM to synthesize data)
+2026-04-11 21:50:10 | INFO     | aether.agents.brief_writer:execute - Step 4: Success! Brief completed.
+2026-04-11 21:50:10 | INFO     | __main__:test_brief_writer_agent - Execution finished. Printing results:
+
+2026-04-11 21:56:52 | INFO     | __main__:test_qa_agent - ================================================================================
+2026-04-11 21:56:52 | INFO     | __main__:test_qa_agent - 🧪 Testing Quality Assurance Agent
+2026-04-11 21:56:52 | INFO     | __main__:test_qa_agent - ================================================================================
+2026-04-11 21:56:52 | INFO     | __main__:test_qa_agent - Generating mock data pipeline for audit...
+2026-04-11 21:56:52 | INFO     | __main__:test_qa_agent - Initializing QAAgent instance...
+2026-04-11 21:56:52 | INFO     | __main__:test_qa_agent - Passing all data modules to QA agent.execute()...
+2026-04-11 21:56:52 | INFO     | aether.agents.qa:execute - Step 1: QAAgent execution started
+2026-04-11 21:56:52 | INFO     | aether.tools.rag_tool:_initialize - Initializing Pinecone connection...
+2026-04-11 21:57:12 | INFO     | aether.tools.rag_tool:_initialize - ✅ NICE NG97 RAG tool initialized successfully (local embeddings)
+2026-04-11 21:57:14 | INFO     | aether.agents.qa:execute - Step 2: Initializing CrewAI environment
+2026-04-11 21:57:14 | INFO     | aether.agents.qa:execute - Step 3: Kicking off Crew... (Waiting for LLM audit)
+2026-04-11 21:57:29 | INFO     | aether.agents.qa:execute - Step 4: Validation complete - Status: QAStatus.GREEN
+2026-04-11 21:57:29 | INFO     | __main__:test_qa_agent - Execution finished. Printing results:
+
+2026-04-12 14:39:44 | INFO     | __main__:ingest_sample_data - ================================================================================
+2026-04-12 14:39:44 | INFO     | __main__:ingest_sample_data - Ingesting Sample NICE NG97 Guidelines (Local Embeddings)
+2026-04-12 14:39:44 | INFO     | __main__:ingest_sample_data - ================================================================================
+2026-04-12 14:39:44 | INFO     | __main__:ingest_sample_data - 
+1. Connecting to Pinecone...
+2026-04-12 14:39:46 | INFO     | __main__:ingest_sample_data - ✅ Connected to Pinecone
+2026-04-12 14:39:46 | INFO     | __main__:ingest_sample_data - 
+2. Initializing local embeddings...
+2026-04-12 14:39:46 | INFO     | __main__:ingest_sample_data -    Model: all-MiniLM-L6-v2 (384 dimensions)
+2026-04-12 14:39:46 | INFO     | __main__:ingest_sample_data -    (First run may download model ~90MB)
+2026-04-12 14:40:01 | INFO     | __main__:ingest_sample_data - ✅ Local embeddings initialized
+2026-04-12 14:40:01 | INFO     | __main__:ingest_sample_data - 
+3. Creating documents...
+2026-04-12 14:40:01 | INFO     | __main__:ingest_sample_data - ✅ Created 10 documents
+2026-04-12 14:40:01 | INFO     | __main__:ingest_sample_data - 
+4. Generating embeddings and ingesting into Pinecone...
+2026-04-12 14:40:01 | INFO     | __main__:ingest_sample_data -    (This may take 30-60 seconds...)
+2026-04-12 14:40:06 | INFO     | __main__:ingest_sample_data - ✅ Documents ingested successfully
+2026-04-12 14:40:06 | INFO     | __main__:ingest_sample_data - 
+5. Verifying ingestion...
+2026-04-12 14:40:11 | INFO     | __main__:ingest_sample_data - ✅ Index now contains 20 vectors
+2026-04-12 14:40:11 | INFO     | __main__:ingest_sample_data - 
+6. Testing retrieval...
+2026-04-12 14:40:11 | INFO     | __main__:ingest_sample_data - ✅ Retrieved 2 documents for test query
+2026-04-12 14:40:11 | INFO     | __main__:ingest_sample_data - 
+📄 Sample result:
+2026-04-12 14:40:11 | INFO     | __main__:ingest_sample_data -    NICE NG97 recommends using validated cognitive assessment instruments including MMSE (Mini-Mental State Examination), MoCA (Montreal Cognitive Assessm...
+2026-04-12 14:40:11 | INFO     | __main__:ingest_sample_data - 
+================================================================================
+2026-04-12 14:40:11 | INFO     | __main__:ingest_sample_data - ✅ Sample Data Ingestion Complete!
+2026-04-12 14:40:11 | INFO     | __main__:ingest_sample_data - ================================================================================
+2026-04-12 14:40:11 | INFO     | __main__:ingest_sample_data - 
+📊 Summary:
+2026-04-12 14:40:11 | INFO     | __main__:ingest_sample_data -    Ingested: 10 guideline excerpts
+2026-04-12 14:40:11 | INFO     | __main__:ingest_sample_data -    Embeddings: all-MiniLM-L6-v2 (384 dimensions)
+2026-04-12 14:40:11 | INFO     | __main__:ingest_sample_data -    Total vectors in index: 20
+2026-04-12 14:40:11 | INFO     | __main__:ingest_sample_data - 
+You can now test RAG retrieval:
+2026-04-12 14:40:11 | INFO     | __main__:ingest_sample_data -   python scripts/test_rag.py
+2026-04-12 14:40:39 | INFO     | __main__:ingest_pdf_data - ================================================================================
+2026-04-12 14:40:39 | INFO     | __main__:ingest_pdf_data - Ingesting Full NICE NG97 PDF Guidelines (Semantic Chunking & Local Embeddings)
+2026-04-12 14:40:39 | INFO     | __main__:ingest_pdf_data - ================================================================================
+2026-04-12 14:40:39 | INFO     | __main__:ingest_pdf_data - 
+1. Reading and converting PDF to Markdown: NICE_NG97_Guideline.pdf...
+2026-04-12 14:40:39 | INFO     | __main__:ingest_pdf_data -    (This might take a minute for a 419-page PDF...)
+2026-04-12 14:40:50 | INFO     | __main__:<module> - 
+
+Ingestion cancelled by user
+2026-04-12 14:43:25 | INFO     | __main__:ingest_pdf_data - ================================================================================
+2026-04-12 14:43:25 | INFO     | __main__:ingest_pdf_data - Ingesting Full NICE NG97 PDF Guidelines (Semantic Chunking & Local Embeddings)
+2026-04-12 14:43:25 | INFO     | __main__:ingest_pdf_data - ================================================================================
+2026-04-12 14:43:25 | ERROR    | __main__:ingest_pdf_data - ❌ PDF not found at: C:\Users\abhin\OneDrive\Desktop\clincian ai\data\NICE_NG97_Guideline.pdf
+2026-04-12 14:43:25 | INFO     | __main__:ingest_pdf_data - Please place your NICE guideline PDF at the specified path.
+2026-04-12 14:43:58 | INFO     | __main__:ingest_pdf_data - ================================================================================
+2026-04-12 14:43:58 | INFO     | __main__:ingest_pdf_data - Ingesting Full NICE NG97 PDF Guidelines (Semantic Chunking & Local Embeddings)
+2026-04-12 14:43:58 | INFO     | __main__:ingest_pdf_data - ================================================================================
+2026-04-12 14:43:58 | INFO     | __main__:ingest_pdf_data - 
+1. Reading and converting PDF to Markdown: NICE_NG97_Guideline.pdf...
+2026-04-12 14:43:58 | INFO     | __main__:ingest_pdf_data -    (This might take a minute for a 419-page PDF...)
+2026-04-12 14:46:20 | INFO     | __main__:ingest_pdf_data - ✅ PDF converted to Markdown successfully.
+2026-04-12 14:46:20 | INFO     | __main__:ingest_pdf_data - 
+2. Performing Semantic Chunking...
+2026-04-12 14:46:20 | INFO     | __main__:ingest_pdf_data - ✅ Created 1840 highly semantic chunks from NICE_NG97_Guideline.pdf.
+2026-04-12 14:46:20 | INFO     | __main__:ingest_pdf_data - 
+3. Connecting to Pinecone...
+2026-04-12 14:46:23 | INFO     | __main__:ingest_pdf_data - ✅ Connected to Pinecone
+2026-04-12 14:46:23 | INFO     | __main__:ingest_pdf_data - 
+4. Initializing local embeddings...
+2026-04-12 14:46:23 | INFO     | __main__:ingest_pdf_data -    Model: all-MiniLM-L6-v2 (384 dimensions)
+2026-04-12 14:46:30 | INFO     | __main__:ingest_pdf_data - ✅ Local embeddings initialized
+2026-04-12 14:46:30 | INFO     | __main__:ingest_pdf_data - 
+5. Generating embeddings and ingesting into Pinecone...
+2026-04-12 14:46:30 | INFO     | __main__:ingest_pdf_data -    (This will take a few minutes for a large document...)
+2026-04-12 14:47:34 | INFO     | __main__:ingest_pdf_data - ✅ All documents embedded and ingested successfully
+2026-04-12 14:47:34 | INFO     | __main__:ingest_pdf_data - 
+6. Verifying ingestion...
+2026-04-12 14:47:40 | INFO     | __main__:ingest_pdf_data - ✅ Index now contains 1860 total vectors
+2026-04-12 14:47:40 | INFO     | __main__:ingest_pdf_data - 
+7. Testing retrieval...
+2026-04-12 14:47:41 | INFO     | __main__:ingest_pdf_data - ✅ Retrieved 2 documents for test query
+2026-04-12 14:47:41 | INFO     | __main__:ingest_pdf_data - 
+📄 Top result preview:
+2026-04-12 14:47:41 | INFO     | __main__:ingest_pdf_data -    Metadata: {'instrument': 'MMSE, MoCA, ACE-III', 'section': 'Cognitive Assessment', 'source': 'NICE NG97'}
+2026-04-12 14:47:41 | INFO     | __main__:ingest_pdf_data -    Text: NICE NG97 recommends using validated cognitive assessment instruments including MMSE (Mini-Mental State Examination), MoCA (Montreal Cognitive Assessment), and ACE-III (Addenbrooke's Cognitive Examina...
+2026-04-12 14:47:41 | INFO     | __main__:ingest_pdf_data - 
+================================================================================
+2026-04-12 14:47:41 | INFO     | __main__:ingest_pdf_data - ✅ Massive PDF Data Ingestion Complete!
+2026-04-12 14:47:41 | INFO     | __main__:ingest_pdf_data - ================================================================================
