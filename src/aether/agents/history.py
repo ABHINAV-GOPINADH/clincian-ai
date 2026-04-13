@@ -41,13 +41,30 @@ class ClinicalHistoryAgent:
             RAW CLINICAL NOTES:
             {clinical_notes}
 
-            CRITICAL EXTRACTION RULES:
-                1. ONLY extract explicit medical diagnoses mentioned in the text.
-                2. DO NOT hallucinate or invent SNOMED, ICD-10, or any other medical codes. If a specific code is not explicitly written next to the condition in the text, you MUST set the `code` field to `null`.
-                3. NEVER use administrative codes (e.g., ODS codes like F83006, GMC numbers, NHS numbers, or postal codes) as medical diagnostic codes. 
-                4. Do not guess the medical history. If it is not in the text, leave the list empty.
+            CRITICAL EXTRACTION RULES (YOU MUST FOLLOW ALL 5):
+            
+            1. CONDITIONS: Extract explicit medical diagnoses. DO NOT invent SNOMED/ICD codes; set `code` to `null` if not explicitly written. Never use administrative codes (e.g., F83006) as diagnoses.
+            
+            2. MEDICATIONS: You must extract and separate the components exactly like this:
+                EXAMPLE 1: "Amlodipine 5mg tablets - once daily"
+                -> name: "Amlodipine"
+                -> dosage: "5mg tablets"
+                -> frequency: "once daily"
+                
+                EXAMPLE 2: "Metformin 500mg tablets - twice daily with meals"
+                -> name: "Metformin"
+                -> dosage: "500mg tablets"
+                -> frequency: "twice daily with meals"
 
-                Return ONLY a valid JSON object matching the ClinicalHistory schema.
+                Do not put the dosage in the name field. Do not put the frequency in the dosage field.
+               
+            3. PAST ASSESSMENTS (DO NOT SKIP): You MUST extract any formal clinical tests or examinations mentioned in the text (e.g., the MMSE, its score, and what points were lost). Look closely at the "Examination & Investigations" section.
+            
+            4. TIMELINE EVENTS (DO NOT SKIP): You MUST extract every dated occurrence mentioned in the text into the timeline. This includes the patient's birth year, smoking cessation year, and the specific years they were diagnosed with their medical conditions.
+            
+            5. NO GUESSING: If information for a specific field is completely missing from the text, leave the list empty or set the field to `null`.
+
+            Return ONLY a valid JSON object matching the ClinicalHistory schema.
             """.strip(),
             expected_output="A structured JSON object representing the patient's history.",
             agent=self.agent,
