@@ -2,6 +2,7 @@ from crewai import Agent, Task, Crew
 from aether.config.llm_config import agent_llm 
 from aether.schemas.clinical import PatientData, ClinicalHistory, PatientProfile
 from aether.utils.logger import logger
+from aether.config.llm_config import strict_gemma_llm
 
 class ProfilerAgent:
     """Clinical Risk Profiler Agent - Identifies risks and cognitive indicators."""
@@ -10,14 +11,15 @@ class ProfilerAgent:
         self.llm = agent_llm 
         
         self.agent = Agent(
-            role="Clinical Risk Profiler",
-            goal="Identify clinical risks, safety concerns, and cognitive indicators for dementia assessment",
+            role="Clinical Data Extraction Specialist",
+            goal="Extract explicitly stated clinical risks and cognitive indicators exactly as written in the source text.",
             backstory=(
-                "You are a consultant psychiatrist specializing in old-age psychiatry and "
-                "dementia risk assessment. You have 20 years of experience identifying subtle cognitive "
-                "indicators and safety risks in complex patients."
+                "You are a strict, literal data parser. Your job is to extract facts from clinical notes "
+                "into a structured JSON format. You NEVER infer medical correlations, you NEVER invent "
+                "treatment plans, and you NEVER diagnose the patient. If a piece of information is not "
+                "explicitly written in the source text, you return null."
             ),
-            llm=self.llm,
+            llm=strict_gemma_llm,
             verbose=True,
             allow_delegation=False,
         )
@@ -37,7 +39,7 @@ class ProfilerAgent:
         
         return Task(
             description=f"""
-Perform comprehensive risk profiling and cognitive indicator analysis.
+Perform a strict data extraction of risk flags and cognitive indicators based ONLY on the provided text.
 
 PATIENT:
 {patient_data.name.first} {patient_data.name.last}, {patient_data.age}yo {patient_data.gender}
@@ -54,17 +56,18 @@ MEDICATIONS:
 ALLERGIES:
 {', '.join(clinical_history.allergies) if clinical_history.allergies else 'None documented'}
 
-Analyze and identify:
-1. RISK FLAGS across categories (e.g., fall risk, living alone)
-2. COGNITIVE INDICATORS by domain (e.g., memory, executive function)
-3. COMPLEXITY SCORE (1-10)
-4. INFORMATION GAPS
+EXTRACTION RULES:
+1. RISK FLAGS: Extract only the risks explicitly mentioned in the text. DO NOT invent risks like "falls" unless the word "falls" or "falling" is in the text.
+2. COGNITIVE INDICATORS: Extract only the specific memory or cognitive issues stated.
+3. MITIGATION STRATEGIES: Leave this field null/empty UNLESS a specific treatment or action is explicitly requested in the text. Do not provide medical advice.
+4. COMPLEXITY SCORE (1-10): Assign a score based solely on the number of active conditions and medications listed.
+5. INFORMATION GAPS: List only what is obviously missing for a standard referral.
 
-CRITICAL RULE: Return ONLY a valid JSON object matching the PatientProfile schema.
+CRITICAL RULE: Return ONLY a valid JSON object matching the PatientProfile schema. Do not include markdown formatting like ```json.
             """.strip(),
-            expected_output="Comprehensive patient risk and cognitive profile as JSON",
+            expected_output="Strictly extracted patient risk profile as JSON",
             agent=self.agent,
-            output_pydantic=PatientProfile # <-- The CrewAI Magic!
+            output_pydantic=PatientProfile
         )
     
     def execute(self, patient_data: PatientData, clinical_history: ClinicalHistory) -> PatientProfile:

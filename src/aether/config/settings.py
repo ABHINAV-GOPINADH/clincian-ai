@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     
     # Logging
     log_level: str = "INFO"
+
+    # Hugging Face API Key
+    huggingface_api_key: str = ""
     
     # Embedding dimension for local embeddings
     embedding_dimension: int = 384  # Changed to 384 for all-MiniLM-L6-v2
