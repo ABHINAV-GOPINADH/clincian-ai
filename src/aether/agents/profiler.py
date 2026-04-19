@@ -2,13 +2,13 @@ from crewai import Agent, Task, Crew
 from aether.config.llm_config import agent_llm 
 from aether.schemas.clinical import PatientData, ClinicalHistory, PatientProfile
 from aether.utils.logger import logger
-from aether.config.llm_config import strict_gemma_llm
+from aether.config.llm_config import get_strict_clinical_llm, get_mistral
 
 class ProfilerAgent:
     """Clinical Risk Profiler Agent - Identifies risks and cognitive indicators."""
     
     def __init__(self):
-        self.llm = agent_llm 
+        self.llm = get_mistral()  # Using Mistral for more accurate parsing of clinical text
         
         self.agent = Agent(
             role="Clinical Data Extraction Specialist",
@@ -19,7 +19,7 @@ class ProfilerAgent:
                 "treatment plans, and you NEVER diagnose the patient. If a piece of information is not "
                 "explicitly written in the source text, you return null."
             ),
-            llm=strict_gemma_llm,
+            llm=self.llm,
             verbose=True,
             allow_delegation=False,
         )
