@@ -8,7 +8,7 @@ class ProfilerAgent:
     """Clinical Risk Profiler Agent - Identifies risks and cognitive indicators."""
     
     def __init__(self):
-        self.llm = get_mistral()  # Using Mistral for more accurate parsing of clinical text
+        self.llm = get_strict_clinical_llm()  # Using strict clinical LLM for accurate parsing
         
         self.agent = Agent(
             role="Clinical Data Extraction Specialist",
