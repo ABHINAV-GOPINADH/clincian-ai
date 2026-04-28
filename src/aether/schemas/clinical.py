@@ -1,7 +1,7 @@
-from datetime import date, datetime
+from datetime import date
 from enum import Enum
-from typing import List, Optional, Any, Dict, Union
-from pydantic import BaseModel, Field, EmailStr, field_validator
+from typing import List, Optional, Any, Dict, Union,Literal
+from pydantic import BaseModel, Field, EmailStr, field_validator, AliasChoices
 import re
 
 # ========== ENUMS ==========
@@ -57,6 +57,7 @@ class InstrumentType(str, Enum):
     CDR = "CDR"
     GDS = "GDS"
     NPI = "NPI"
+
 
 
 class Priority(str, Enum):
@@ -407,6 +408,11 @@ class TimelineEvent(BaseModel):
     event: str
     significance: str = Field(..., pattern="^(low|medium|high)$")
 
+class Event(BaseModel):
+    date: date | str | None = None  # accept ISO string or date
+    description: str
+    severity: Literal['mild', 'moderate', 'severe'] | str | None = None
+
 
 class ClinicalHistory(BaseModel):
     conditions: List[Condition]
@@ -414,6 +420,10 @@ class ClinicalHistory(BaseModel):
     allergies: List[str]
     past_assessments: List[PastAssessment]
     timeline_events: List[TimelineEvent]
+    significant_events: list[Event] | None = Field(
+        default=None,
+        validation_alias=AliasChoices("significant_events","timeline_events","events","recent_events")
+    )
 
 
 # ========== NEW: EXTENDED CLINICAL HISTORY MODELS ==========

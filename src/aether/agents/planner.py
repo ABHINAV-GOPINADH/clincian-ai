@@ -60,8 +60,6 @@ RISK SUMMARY:
 COGNITIVE CONCERNS:
 {cognitive_concerns_text}
 
-NICE NG97 GUIDANCE:
-{nice_guidance_text}
 
 Design an assessment plan mapping specific validated instruments to the cognitive concerns.
 Include the instrument name, rationale for using it, prioritization (high/medium/low), and estimated duration.
@@ -70,7 +68,7 @@ CRITICAL RULE: Return ONLY a valid JSON object matching the AssessmentPlan schem
             """.strip(),
             expected_output="NICE-compliant assessment battery as a structured JSON object",
             agent=self.agent,
-            output_pydantic=AssessmentPlan # <-- The CrewAI Magic!
+            output_pydantic=AssessmentPlan 
         )
     
     def execute(self, patient_data: PatientData, patient_profile: PatientProfile) -> AssessmentPlan:

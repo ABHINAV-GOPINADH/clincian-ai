@@ -77,7 +77,7 @@ def get_strict_clinical_llm() -> LLM:
     print(f"✅ HuggingFace token loaded. Starts with: {hf_token[:5]}...")
 
     return LLM(
-        model="huggingface/Qwen/Qwen2.5-7B-Instruct",  # ✅ Verify exact model ID on HF Hub
+        model="huggingface/Qwen/Qwen2.5-7B-Instruct",  
         task="text-generation",
         max_tokens=1024,
         temperature=0.01,
